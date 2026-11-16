@@ -1,0 +1,476 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+  <base target="_top">
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Verifica di Scienze: La Terra si trasforma</title>
+  <style>
+    :root {
+      --primary-color: #2c3e50;
+      --accent-color: #3498db;
+      --success-color: #2ecc71;
+      --error-color: #e74c3c;
+      --bg-color: #f4f6f9;
+      --card-bg: #ffffff;
+    }
+
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background-color: var(--bg-color);
+      color: #333;
+      margin: 0;
+      padding: 20px;
+      line-height: 1.5;
+    }
+
+    .container {
+      max-width: 800px;
+      margin: 0 auto;
+      background: var(--card-bg);
+      padding: 30px;
+      border-radius: 12px;
+      box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+    }
+
+    h1 {
+      color: var(--primary-color);
+      text-align: center;
+      margin-bottom: 5px;
+      font-size: 1.8rem;
+    }
+
+    .subtitle {
+      text-align: center;
+      color: #7f8c8d;
+      margin-bottom: 25px;
+      font-size: 1rem;
+    }
+
+    /* Stili Sezione Anagrafica Studente */
+    .student-info-card {
+      background: #ebf5fb;
+      border: 1px solid #bde0fe;
+      border-left: 5px solid var(--primary-color);
+      padding: 20px;
+      border-radius: 8px;
+      margin-bottom: 25px;
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(170px, 1fr));
+      gap: 15px;
+    }
+
+    .form-group {
+      display: flex;
+      flex-direction: column;
+    }
+
+    .form-group label {
+      font-size: 0.85rem;
+      font-weight: 700;
+      color: var(--primary-color);
+      margin-bottom: 5px;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+
+    .form-group input {
+      padding: 10px 12px;
+      border: 1px solid #cbd5e1;
+      border-radius: 6px;
+      font-size: 0.95rem;
+      font-family: inherit;
+      background-color: #fff;
+      transition: border-color 0.2s ease;
+    }
+
+    .form-group input:focus {
+      outline: none;
+      border-color: var(--accent-color);
+      box-shadow: 0 0 0 3px rgba(52, 152, 219, 0.15);
+    }
+
+    .student-summary {
+      background: #ffffff;
+      border: 1px solid #d1e7dd;
+      border-radius: 8px;
+      padding: 12px 16px;
+      margin-bottom: 15px;
+      font-size: 1rem;
+      color: var(--primary-color);
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 15px;
+    }
+
+    .question-card {
+      background: #fafafa;
+      border-left: 5px solid var(--accent-color);
+      padding: 18px;
+      margin-bottom: 20px;
+      border-radius: 6px;
+    }
+
+    .question-title {
+      font-weight: 600;
+      font-size: 1.05rem;
+      margin-bottom: 12px;
+      color: var(--primary-color);
+    }
+
+    .option-label {
+      display: block;
+      padding: 10px 14px;
+      margin: 8px 0;
+      background: #fff;
+      border: 1px solid #ddd;
+      border-radius: 6px;
+      cursor: pointer;
+      transition: all 0.2s ease;
+    }
+
+    .option-label:hover {
+      background: #ebf5fb;
+      border-color: var(--accent-color);
+    }
+
+    .option-label input {
+      margin-right: 10px;
+      transform: scale(1.1);
+    }
+
+    .btn-submit {
+      display: block;
+      width: 100%;
+      background: var(--accent-color);
+      color: white;
+      border: none;
+      padding: 15px;
+      font-size: 1.1rem;
+      font-weight: bold;
+      border-radius: 8px;
+      cursor: pointer;
+      transition: background 0.3s ease;
+      margin-top: 25px;
+    }
+
+    .btn-submit:hover {
+      background: #2980b9;
+    }
+
+    /* Stili Risultati */
+    #results-panel {
+      display: none;
+    }
+
+    .score-box {
+      text-align: center;
+      background: #eef9f1;
+      border: 2px solid var(--success-color);
+      padding: 20px;
+      border-radius: 10px;
+      margin-bottom: 30px;
+    }
+
+    .score-number {
+      font-size: 2.5rem;
+      font-weight: bold;
+      color: var(--success-color);
+    }
+
+    .result-card {
+      padding: 15px;
+      margin-bottom: 15px;
+      border-radius: 8px;
+    }
+
+    .result-card.correct {
+      background: #e8f8f5;
+      border-left: 5px solid var(--success-color);
+    }
+
+    .result-card.incorrect {
+      background: #fdf2e9;
+      border-left: 5px solid var(--error-color);
+    }
+
+    .feedback-title {
+      font-weight: bold;
+      margin-bottom: 5px;
+      font-size: 1.05rem;
+    }
+
+    .theory-box {
+      margin-top: 10px;
+      padding: 12px;
+      background: #fff;
+      border-radius: 6px;
+      font-size: 0.95rem;
+      color: #444;
+      border: 1px dashed #ccc;
+    }
+
+    .spinner {
+      display: none;
+      text-align: center;
+      margin: 20px 0;
+      font-weight: bold;
+      color: var(--accent-color);
+      font-size: 1.1rem;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="container">
+    <h1>Verifica di Scienze</h1>
+    <div class="subtitle">Unità: La Terra si trasforma • Scuola Secondaria di I Grado</div>
+
+    <!-- Form del Quiz -->
+    <form id="quiz-form">
+      <!-- Dati Anagrafici Studente -->
+      <div class="student-info-card">
+        <div class="form-group">
+          <label for="cognome">Cognome *</label>
+          <input type="text" id="cognome" name="cognome" placeholder="Es. Rossi" required>
+        </div>
+        <div class="form-group">
+          <label for="nome">Nome *</label>
+          <input type="text" id="nome" name="nome" placeholder="Es. Marco" required>
+        </div>
+        <div class="form-group">
+          <label for="classe">Classe *</label>
+          <input type="text" id="classe" name="classe" placeholder="Es. 3ª A" required>
+        </div>
+        <div class="form-group">
+          <label for="data">Data *</label>
+          <input type="date" id="data" name="data" required>
+        </div>
+      </div>
+
+      <div id="questions-container">
+        <div style="text-align: center; color: #7f8c8d; padding: 20px;">Caricamento domande in corso...</div>
+      </div>
+      <button type="submit" class="btn-submit" id="submit-btn" style="display: none;">Invia la verifica</button>
+    </form>
+
+    <div class="spinner" id="loading">Correzione in corso...</div>
+
+    <!-- Pannello Risultati -->
+    <div id="results-panel">
+      <div class="score-box">
+        <div class="student-summary" id="student-summary"></div>
+        <div>Risultato Finale</div>
+        <div class="score-number" id="final-score">0 / 20</div>
+        <div id="final-vote" style="font-size: 1.2rem; font-weight: 600; color: #2c3e50; margin-top: 5px;"></div>
+      </div>
+
+      <h2>Revisione Risposte e Teoria</h2>
+      <div id="feedback-container"></div>
+    </div>
+  </div>
+
+  <script>
+    // Dati di riserva (fallback) per permettere l'esecuzione anche fuori da Google Apps Script (es. Anteprima)
+    const FALLBACK_QUESTIONS = [
+      { id: 1, type: "mc", question: "In base al loro processo di formazione, le rocce magmatiche (o ignee) si dividono in:", options: ["Effusive ed intrusive", "Metamorfiche e sedimentarie", "Detritiche e organogene", "Cristalline e laminari"], correct: 0, theory: "Le rocce magmatiche si dividono in effusive (se il magma raffredda rapidamente in superficie) e intrusive (se il magma raffredda lentamente in profondità)." },
+      { id: 2, type: "mc", question: "Quale tra le seguenti rocce ha un aspetto vetroso privo di cristalli evidenti a causa del raffreddamento velocissimo?", options: ["Granito", "Ossidiana", "Gneiss", "Marmo"], correct: 1, theory: "L'ossidiana è una roccia magmatica effusiva che si raffredda così rapidamente da assumere un aspetto vetroso senza formazione di cristalli visibili." },
+      { id: 3, type: "vf", question: "I cristalli che si formano dal raffreddamento del magma sono tanto più grandi quanto più LENTAMENTE avviene il processo.", options: ["Vero", "Falso"], correct: 0, theory: "Il tempo permette agli atomi di organizzarsi: più il raffreddamento è lento (in profondità), più i cristalli crescono (es. granito)." },
+      { id: 4, type: "mc", question: "Come si trasforma il calcare quando viene sottoposto ad altissime temperature a causa del calore del magma?", options: ["Diventa basalto", "Si trasforma in marmo", "Diventa gneiss", "Si trasforma in ardesia"], correct: 1, theory: "Il calcare, sottoposto ad alte temperature e metamorfismo di contatto, ricristallizza diventando marmo." },
+      { id: 5, type: "mc", question: "Lo gneiss è una roccia metamorfica derivata dallo schiacciamento ad alta pressione di quale roccia originale?", options: ["Argillite", "Granito", "Porfido", "Calcare"], correct: 1, theory: "Sottoposto a fortissime pressioni, il granito subisce un riallineamento dei cristalli trasformandosi in gneiss." },
+      { id: 6, type: "fill", question: "Completa la frase: Il processo di demolizione e disgregazione delle rocce da parte degli agenti atmosferici prende il nome di ________.", options: ["Erosione", "Cementazione", "Sedimentazione", "Fusione"], correct: 0, theory: "L'erosione è l'azione meccanica e chimica con cui acqua, vento, ghiaccio e sbalzi termici sgretolano le rocce." },
+      { id: 7, type: "vf", question: "L'acqua infiltrata nelle crepe delle rocce si dilata quando gela, esercitando una forte pressione che spacca la roccia.", options: ["Vero", "Falso"], correct: 0, theory: "L'acqua ha la proprietà unica di aumentare di volume quando solida (ghiaccio), agendo come un cuneo che spacca le rocce." },
+      { id: 8, type: "mc", question: "L'alterazione chimica del calcare ad opera dell'acqua piovana resa acida dall'anidride carbonica porta alla formazione di:", options: ["Vulcani e geyser", "Grotte, stalattiti e stalagmiti", "Dorsali oceaniche", "Gneiss e graniti"], correct: 1, theory: "L'acqua acida scioglie il carbonato di calcio del calcare creando cavità sotterranee (grotte) e depositando stalattiti e stalagmiti." },
+      { id: 9, type: "mc", question: "I due processi che trasformano i sedimenti sciolti in roccia sedimentaria compatta sono:", options: ["Fusione e raffreddamento", "Compattazione e cementazione", "Erosione e trasporto", "Metamorfismo e pressione"], correct: 1, theory: "Il peso degli strati schiaccia i granelli (compattazione) e i sali minerali disciolti saldano i frammenti (cementazione)." },
+      { id: 10, type: "mc", question: "Le Dolomiti sono un esempio straordinario di rocce sedimentarie organogene formati in antico da:", options: ["Colate di lava basaltica", "Scogliere coralline e organismi con guscio calcareo", "Accumuli di cenere vulcanica", "Ghiacciai continentali"], correct: 1, theory: "Le Dolomiti erano antiche barriere coralline nate dall'accumulo di scheletri calcarei di organismi marini in un mare caldo." },
+      { id: 11, type: "fill", question: "Completa: La temperatura all'interno della crosta terrestre aumenta in media di 3 °C ogni _____ metri di profondità.", options: ["10 metri", "100 metri", "1000 metri", "50 metri"], correct: 1, theory: "Il gradiente geotermico medio nella crosta superficiale è di circa 3 °C di aumento ogni 100 metri di profondità." },
+      { id: 12, type: "mc", question: "Che cosa distingue il magma dalla lava?", options: ["Il magma si trova sottoterra, mentre la lava è il magma giunto in superficie privo di gran parte dei gas", "La lava è fredda, il magma è caldo", "Il magma fuoriesce solo dai geyser", "Non c'è alcuna differenza"], correct: 0, theory: "Il magma è la roccia fusa ricca di gas sotterranea; quando fuoriesce all'esterno perde i gas e prende il nome di lava." },
+      { id: 13, type: "vf", question: "Un vulcano che erutta lava molto VISCOSA è poco pericoloso perché la lava scorre velocemente.", options: ["Vero", "Falso"], correct: 1, theory: "La lava viscosa ostruisce il camino vulcanico formando un 'tappo' che fa salire la pressione dei gas rendendo l'eruzione altamente esplosiva e pericolosa." },
+      { id: 14, type: "mc", question: "Il punto esatto nel sottosuolo in cui si genera la frattura che provoca un terremoto è detto:", options: ["Epicentro", "Ipocentro", "Cratere", "Fossa"], correct: 1, theory: "L'ipocentro è il punto profondo di rottura delle rocce; l'epicentro è la sua proiezione verticale sulla superficie terrestre." },
+      { id: 15, type: "mc", question: "Quali sono i tre strati principali che costituiscono la struttura interna della Terra?", options: ["Crosta, Mantello, Nucleo", "Atmosfera, Idrosfera, Litosfera", "Basalto, Granito, Marmo", "Pangea, Pantalassa, Teti"], correct: 0, theory: "Dall'esterno verso l'interno, la Terra si compone di Crosta (solida e sottile), Mantello (spesso e semifuso) e Nucleo (molto caldo e denso)." },
+      { id: 16, type: "fill", question: "Le lunghissime catene di vulcani sottomarini al centro degli oceani da cui fuoriesce costantemente magma sono dette ________ oceaniche.", options: ["Dorsali", "Fosse", "Corone", "Placche"], correct: 0, theory: "Le dorsali oceaniche sono fratture lunghe decine di migliaia di chilometri dove si genera costantemente nuova crosta oceanica." },
+      { id: 17, type: "vf", question: "Nelle fosse oceaniche le placche si scontrano e la crosta oceanica più densa sprofonda riassorbendosi nel mantello.", options: ["Vero", "Falso"], correct: 0, theory: "Nelle fosse oceaniche avviene la subduzione: la crosta si consuma e sprofonda nelle viscere del mantello." },
+      { id: 18, type: "mc", question: "Cosa muove le placche litosferiche sulla superficie terrestre?", options: ["Le correnti oceaniche e il vento", "I movimenti convettivi di materiale caldo nel mantello", "La forza di gravità della Luna", "La rotazione dell'asse terrestre"], correct: 1, theory: "I movimenti convettivi nel mantello (il materiale caldo risale, si raffredda e ridiscende) trascinano le placche soprastanti." },
+      { id: 19, type: "mc", question: "La catena montuosa dell'Himalaya si è formata in seguito allo scontro tra:", options: ["La placca Indiana e la placca Eurasiatica", "La placca Africana e la placca Sudamericana", "La placca del Pacifico e la placca Nordamericana", "Due placche esclusivamente oceaniche"], correct: 0, theory: "Dallo scontro frontale tra due margini continentali (placca Indiana ed Eurasiatica), la crosta si è piegata e sollevata formando l'Himalaya." },
+      { id: 20, type: "fill", question: "Circa 250 milioni di anni fa tutte le terre emerse erano unite in un unico supercontinente chiamato ________.", options: ["Pangea", "Gondwana", "Eurasia", "Tetide"], correct: 0, theory: "La Pangea (da 'tutta la terra') era il supercontinente primordiale teorizzato da Alfred Wegener." }
+    ];
+
+    // Verifica se lo script è eseguito dentro Google Apps Script
+    function isGoogleAppsScript() {
+      return typeof google !== 'undefined' && google.script && google.script.run;
+    }
+
+    // Variabile globale per conservare i dati dello studente
+    var currentStudentInfo = {};
+
+    // Caricamento iniziale delle domande (dal server GAS o da fallback locale)
+    window.onload = function() {
+      // Imposta automaticamente la data odierna nel campo data
+      var dateInput = document.getElementById('data');
+      if (dateInput) {
+        dateInput.value = new Date().toISOString().split('T')[0];
+      }
+
+      if (isGoogleAppsScript()) {
+        google.script.run
+          .withSuccessHandler(renderQuestions)
+          .withFailureHandler(handleError)
+          .getQuestions();
+      } else {
+        renderQuestions(FALLBACK_QUESTIONS);
+      }
+    };
+
+    // Gestione di eventuali errori di comunicazione con Code.gs
+    function handleError(error) {
+      document.getElementById('questions-container').innerHTML = 
+        '<div style="color: #e74c3c; padding: 15px; background: #fdf2e9; border-radius: 6px;">' +
+        '<strong>Errore di caricamento:</strong> ' + error.message + '</div>';
+    }
+
+    // Genera l'HTML delle domande a schermo
+    function renderQuestions(questions) {
+      var container = document.getElementById('questions-container');
+      var html = '';
+
+      questions.forEach(function(q, index) {
+        html += '<div class="question-card">';
+        html += '<div class="question-title">' + (index + 1) + '. ' + q.question + '</div>';
+        
+        q.options.forEach(function(opt, optIndex) {
+          html += '<label class="option-label">';
+          html += '<input type="radio" name="q_' + q.id + '" value="' + optIndex + '" required>';
+          html += opt;
+          html += '</label>';
+        });
+
+        html += '</div>';
+      });
+
+      container.innerHTML = html;
+      document.getElementById('submit-btn').style.display = 'block';
+    }
+
+    // Valutazione locale (usata quando non si è su Google Apps Script)
+    function evaluateLocally(userAnswers) {
+      var score = 0;
+      var results = [];
+
+      for (var i = 0; i < FALLBACK_QUESTIONS.length; i++) {
+        var q = FALLBACK_QUESTIONS[i];
+        var uAns = parseInt(userAnswers[q.id]);
+        var isCorrect = (uAns === q.correct);
+
+        if (isCorrect) {
+          score++;
+        }
+
+        results.push({
+          id: q.id,
+          question: q.question,
+          isCorrect: isCorrect,
+          userAnswerText: isNaN(uAns) ? "Nessuna risposta" : q.options[uAns],
+          correctAnswerText: q.options[q.correct],
+          theory: q.theory
+        });
+      }
+
+      var vote10 = ((score / FALLBACK_QUESTIONS.length) * 10).toFixed(1);
+
+      return {
+        score: score,
+        total: FALLBACK_QUESTIONS.length,
+        vote10: vote10,
+        details: results
+      };
+    }
+
+    // Gestione dell'invio del form
+    document.getElementById('quiz-form').addEventListener('submit', function(e) {
+      e.preventDefault();
+      
+      document.getElementById('submit-btn').style.display = 'none';
+      document.getElementById('loading').style.display = 'block';
+
+      var formData = new FormData(this);
+      var answers = {};
+
+      // Salva i dati anagrafici dello studente
+      currentStudentInfo = {
+        cognome: (formData.get('cognome') || '').trim(),
+        nome: (formData.get('nome') || '').trim(),
+        classe: (formData.get('classe') || '').trim(),
+        data: formData.get('data') || ''
+      };
+
+      for (var pair of formData.entries()) {
+        if (pair[0].startsWith('q_')) {
+          var qId = pair[0].replace('q_', '');
+          answers[qId] = pair[1];
+        }
+      }
+
+      if (isGoogleAppsScript()) {
+        google.script.run
+          .withSuccessHandler(showResults)
+          .withFailureHandler(handleError)
+          .processAnswers(answers, currentStudentInfo);
+      } else {
+        setTimeout(function() {
+          showResults(evaluateLocally(answers));
+        }, 300);
+      }
+    });
+
+    // Visualizzazione dei risultati e del feedback teorico
+    function showResults(data) {
+      document.getElementById('quiz-form').style.display = 'none';
+      document.getElementById('loading').style.display = 'none';
+      
+      var resultsPanel = document.getElementById('results-panel');
+      resultsPanel.style.display = 'block';
+
+      // Formatta la data in formato italiano (GG/MM/AAAA)
+      var formattedDate = currentStudentInfo.data;
+      if (formattedDate && formattedDate.includes('-')) {
+        var parts = formattedDate.split('-');
+        formattedDate = parts[2] + '/' + parts[1] + '/' + parts[0];
+      }
+
+      // Mostra l'intestazione con i dati dello studente nel riepilogo finale
+      document.getElementById('student-summary').innerHTML = 
+        '<span><strong>Studente:</strong> ' + currentStudentInfo.cognome + ' ' + currentStudentInfo.nome + '</span>' +
+        '<span>•</span>' +
+        '<span><strong>Classe:</strong> ' + currentStudentInfo.classe + '</span>' +
+        '<span>•</span>' +
+        '<span><strong>Data:</strong> ' + formattedDate + '</span>';
+
+      document.getElementById('final-score').innerText = data.score + ' / ' + data.total;
+      document.getElementById('final-vote').innerText = 'Voto: ' + data.vote10 + ' / 10';
+
+      var feedbackContainer = document.getElementById('feedback-container');
+      var html = '';
+
+      data.details.forEach(function(item, idx) {
+        if (item.isCorrect) {
+          html += '<div class="result-card correct">';
+          html += '<div class="feedback-title" style="color: var(--success-color);">✓ Domanda ' + (idx + 1) + ': Esatto!</div>';
+          html += '<div><strong>Punto chiave:</strong> ' + item.theory + '</div>';
+          html += '</div>';
+        } else {
+          html += '<div class="result-card incorrect">';
+          html += '<div class="feedback-title" style="color: var(--error-color);">✗ Domanda ' + (idx + 1) + ': Risposta non corretta</div>';
+          html += '<div><strong>La tua risposta:</strong> ' + item.userAnswerText + '</div>';
+          html += '<div><strong>Risposta corretta:</strong> ' + item.correctAnswerText + '</div>';
+          html += '<div class="theory-box"><strong>📖 Ripasso Teoria:</strong> ' + item.theory + '</div>';
+          html += '</div>';
+        }
+      });
+
+      feedbackContainer.innerHTML = html;
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+  </script>
+</body>
+</html>
